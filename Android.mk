@@ -1,4 +1,4 @@
-ifeq ($(call my-dir),$(call project-path-for,qcom-display))
+ifneq ($(filter msm8660,$(TARGET_BOARD_PLATFORM)),)
 
 display-hals := libgralloc libgenlock libcopybit libvirtual
 display-hals += libhwcomposer liboverlay libqdutils libexternal libqservice
