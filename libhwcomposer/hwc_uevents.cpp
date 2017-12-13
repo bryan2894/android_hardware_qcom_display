@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2010 The Android Open Source Project
  * Copyright (C) 2012, The Linux Foundation. All rights reserved.
@@ -91,7 +92,7 @@ static bool getPanelResetStatus(hwc_context_t* ctx, const char* strUdata, int le
     const char* iter_str = strUdata;
     if (strcasestr("change@/devices/virtual/graphics/fb0", strUdata)) {
         while(((iter_str - strUdata) <= len) && (*iter_str)) {
-            char* pstr = strstr(iter_str, "PANEL_ALIVE=0");
+            const char* pstr = strstr(iter_str, "PANEL_ALIVE=0");
             if (pstr != NULL) {
                 ALOGE("%s: got change event in fb0 with PANEL_ALIVE=0",
                                                            __FUNCTION__);
@@ -109,7 +110,7 @@ static int getConnectedState(const char* strUdata, int len)
 {
     const char* iter_str = strUdata;
     while(((iter_str - strUdata) <= len) && (*iter_str)) {
-        char* pstr = strstr(iter_str, "SWITCH_STATE=");
+        const char* pstr = strstr(iter_str, "SWITCH_STATE=");
         if (pstr != NULL) {
             return (atoi(pstr + strlen("SWITCH_STATE=")));
         }
@@ -350,7 +351,7 @@ static void *uevent_loop(void *param)
     hwc_context_t * ctx = reinterpret_cast<hwc_context_t *>(param);
     char thread_name[64] = HWC_UEVENT_THREAD_NAME;
     prctl(PR_SET_NAME, (unsigned long) &thread_name, 0, 0, 0);
-    androidSetThreadPriority(0, HAL_PRIORITY_URGENT_DISPLAY);
+    setpriority(PRIO_PROCESS, 0, HAL_PRIORITY_URGENT_DISPLAY);
     if(!uevent_init()) {
         ALOGE("%s: failed to init uevent ",__FUNCTION__);
         return NULL;
